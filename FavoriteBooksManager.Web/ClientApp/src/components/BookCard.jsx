@@ -1,16 +1,10 @@
-import { useState } from "react";
 import { useUser } from "./UserContext"
-import axios from "axios";
 
 export default function BookCard({ favoriteBookKeys, onAddClick, onRemoveClick,
     book }) {
     const { user } = useUser();
 
-
-
-
     const { key, title, author, coverImage } = book;
-
     return <>
         <div className="col-md-4 mb-3 card h-100">
             <div className="d-flex align-items-center justify-content-center" style={{ height: '200px' }}>

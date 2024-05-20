@@ -65,7 +65,7 @@ namespace FavoriteBooksManager.Web.Controllers
         {
             var result = new BooksRepository(_conStr).GetTopFavorites(limit);
             return result == null ? null :
-                result.Select(b => new Book { Title = b.Title, Author = b.Author, CoverImage = b.CoverImage }).ToList();
+                result.Select(b => new Book { Key = b.Key, Title = b.Title, Author = b.Author, CoverImage = b.CoverImage }).ToList();
         }
 
         [HttpGet("getFavorites")]
@@ -99,7 +99,7 @@ namespace FavoriteBooksManager.Web.Controllers
             repo.UpdateBookNote(model.Id, model.Notes);
         }
 
-        [HttpPost("removeFromFavorites")]
+        [HttpPost("removeFromFavoritesByKey")]
         public void DeleteFavoriteBook(KeyModel model)
         {
             var repo = new BooksRepository(_conStr);
@@ -110,6 +110,18 @@ namespace FavoriteBooksManager.Web.Controllers
             }
 
             repo.Delete(id.Value);
+        }
+
+        [HttpPost("removeFromFavorites")]
+        public void DeleteFavoriteBook(IdModel model)
+        {
+            var repo = new BooksRepository(_conStr);
+            if (!repo.IsUsersBook(GetCurrentUserId(),model.Id))
+            {
+                return;
+            }
+
+            repo.Delete(model.Id);
         }
 
         private int GetCurrentUserId() => new UserRepository(_conStr).GetByEmail(User.Identity.Name).Id;

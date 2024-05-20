@@ -36,14 +36,9 @@ export default function Login() {
                         <input type={viewPassword ? "input" : "password"} name="password" placeholder="Password" className="form-control"
                             value={password} onChange={e => setPassword(e.target.value)} />
                         <div className="input-group-append">
-                            {!viewPassword &&
-                                <span className="input-group-text">
-                                    <i onClick={() => setViewPassword(true)} className="bi bi-eye"></i>
-                                </span>}
-                            {viewPassword &&
-                                <span className="input-group-text">
-                                    <i onClick={() => setViewPassword(false)} className="bi bi-eye-slash"></i>
-                                </span>}
+                            <span onClick={() => setViewPassword(!viewPassword)} className="input-group-text">
+                                <i className={viewPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                            </span>
                         </div>
                     </div>
                     <br />

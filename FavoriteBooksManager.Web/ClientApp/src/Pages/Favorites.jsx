@@ -15,13 +15,19 @@ export default function Favorites() {
         setFavoriteBooks(data);
     }
 
+    const onRemoveClick = async id => {
+        await axios.post('/api/books/removeFromFavorites', { id });
+        setFavoriteBooks(favoriteBooks.filter(f => f.id !== id));
+    }
+
     return <>
         <h2 className="mb-4 text-primary">My Favorites</h2>
         <div className="row">
             {favoriteBooks.length ?
                 favoriteBooks.map(b =>
                     <FavoriteBookCard
-                        favoiteBook={b}
+                        favoriteBook={b}
+                        onRemoveClick={onRemoveClick}
                         refresh={refresh}
                         key={b.id} />) :
                 <Link to="/search" style={{ textDecoration: 'none', color: 'black' }}>

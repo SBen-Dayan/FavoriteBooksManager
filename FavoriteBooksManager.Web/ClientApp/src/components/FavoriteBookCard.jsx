@@ -1,22 +1,27 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function FavoriteBookCard({refresh, favoiteBook: { id, title, author, notes, coverImage } }) {
-    const [noteHidden, setNoteHidden]  = useState(true);
-    const [ editNotesText, setEditNotesText ] = useState(notes);
+export default function FavoriteBookCard({ refresh, onRemoveClick,
+            favoriteBook: { id, title, author, notes, coverImage } }) {
+    const [noteHidden, setNoteHidden] = useState(true);
+    const [editNotesText, setEditNotesText] = useState(notes);
     const [editMode, setEditMode] = useState(false);
 
     const onSaveClick = async () => {
-        await axios.post('/api/books/updateBookNote', { id, notes : editNotesText});
+        await axios.post('/api/books/updateBookNote', { id, notes: editNotesText });
         setEditMode(false);
         refresh();
     }
+
 
     return <>
         <div className="col-md-4 mb-3 card h-100">
             <div className="d-flex align-items-center justify-content-center" style={{ height: '200px' }}>
                 <img src={coverImage} className="card-img-top"
                     alt={title} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                <button className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" onClick={() => onRemoveClick(id)}>
+                    <i className="bi bi-trash" />
+                </button>
             </div>
             <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{title}</h5>
@@ -36,7 +41,7 @@ export default function FavoriteBookCard({refresh, favoiteBook: { id, title, aut
                             value={editNotesText || ''} onChange={e => setEditNotesText(e.target.value)} />
                         <div className="d-flex justify-content-between mt-2">
                             <button className="btn btn-success" onClick={onSaveClick}>Save Note</button>
-                            <button className="btn btn-outline-secondary ms-2" onClick={() => {setEditMode(false); setEditNotesText(notes)}}>Cancel</button>
+                            <button className="btn btn-outline-secondary ms-2" onClick={() => { setEditMode(false); setEditNotesText(notes) }}>Cancel</button>
                         </div>
                     </div>}
                 </div>

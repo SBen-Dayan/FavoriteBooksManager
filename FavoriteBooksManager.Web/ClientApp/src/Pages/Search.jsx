@@ -8,11 +8,14 @@ export default function Search() {
     const limit = 15;
     const [searchText, setSearchText] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [previewMode, setPreviewMode] = useState(true);
     const [books, setBooks] = useState([]);
     const [favoriteBookKeys, setFavoriteBookKeys] = useState([]);
 
     const onSubmit = async e => {
+        setBooks([]);
         setIsSearching(true);
+        setPreviewMode(false);
         e.preventDefault();
         const { data } = await axios.get(`/api/books/search?query=${searchText}`);
         setBooks(data);
@@ -25,7 +28,7 @@ export default function Search() {
     }
 
     const onRemoveClick = async key => {
-        await axios.post('/api/books/removeFromFavorites', { key });
+        await axios.post('/api/books/removeFromFavoritesByKey', { key });
         setFavoriteBookKeys(favoriteBookKeys.filter(k => k !== key));
     }
 
@@ -50,7 +53,8 @@ export default function Search() {
             </div>
         </form>
         <div className="row">
-            {!isSearching && <h2 className="text-center py-3 mt-3">Top Favorite Books</h2>}
+            {previewMode && <h2 className="text-center py-3 mt-3">Top Favorite Books</h2>}
+            {console.log(books)}
             {!!books.length && books.map(b => <BookCard
                 book={b}
                 onAddClick={onAddClick}
